@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "getopt.h": "c",
+        "regions.h": "c",
+        "dirent.h": "c"
+    }
+}
