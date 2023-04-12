@@ -81,20 +81,20 @@ int main(int argc, char const *argv[])
         }
 
         if (species != NULL){
-            regions_read_region(region, species);
+            regions_read_region(region, species, type);
         }else {
-            regions_read_region(region, "pokemon");
-            regions_read_region(region, "trainers");
+            regions_read_region(region, "pokemon", type);
+            regions_read_region(region, "trainers", type);
         }
     } else {
         for (i = 0; i < nregions; i++){
             region = regions[i];
 
             if (species != NULL){
-                regions_read_region(region, species);
+                regions_read_region(region, species, type);
             }else {
-                regions_read_region(region, "pokemon");
-                regions_read_region(region, "trainers");
+                regions_read_region(region, "pokemon", type);
+                regions_read_region(region, "trainers", type);
             }
         }
     }
