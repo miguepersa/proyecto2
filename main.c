@@ -1,25 +1,20 @@
 #include <stdio.h>
 #include <getopt.h>
 
-#include "regions.h"
+#include "Funciones.h"
 
-#define MAX_REGIONS 16
+#define MAX_REGIONS 32
 
-int main(int argc, char const *argv[])
+int main(int argc, char *const argv[])
 {
     int opt;
     int count_flag = 1;
     int list_flag = 0;
     int size_flag = 0;
-    int region_in_dir;
     char *region = NULL;
     char *species = NULL;
     char *type = NULL;
-    char *name = NULL;
-    int i;
-
-    char* regions[MAX_REGIONS];
-    int nregions = 0;
+    char name[256];
 
     static struct option long_options[] = {
         {"nocount", no_argument, 0, 'c'},
@@ -52,54 +47,19 @@ int main(int argc, char const *argv[])
                 type = optarg;
                 break;
             case '?':
-                // handle invalid option
+                /* handle invalid option */
                 break;
             default:
-                // handle other cases
+                /* handle other cases */
                 break;
         }
     }
 
     if (optind < argc) {
-        name = argv[optind];
+        strcpy(name, argv[optind]);
     }
 
-    regions_get_regions(&nregions, regions);
-
-    if (region != NULL){
-
-        for (i = 0; i < nregions; i++){
-            if (strcmp(region, regions[i]) == 0){
-                region_in_dir = 1;
-                break;
-            }
-        }
-
-        if (!region_in_dir){
-            printf("Region no encontrada en el directorio actual\n");
-            exit(1);
-        }
-
-        if (species != NULL){
-            regions_read_region(region, species, type);
-        }else {
-            regions_read_region(region, "pokemon", type);
-            regions_read_region(region, "trainers", type);
-        }
-    } else {
-        for (i = 0; i < nregions; i++){
-            region = regions[i];
-
-            if (species != NULL){
-                regions_read_region(region, species, type);
-            }else {
-                regions_read_region(region, "pokemon", type);
-                regions_read_region(region, "trainers", type);
-            }
-        }
-    }
-
-    
+    search_dir(".", region, species, type, count_flag, list_flag, size_flag, name);
 
     return 0;
 }
