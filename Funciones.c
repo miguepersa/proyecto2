@@ -53,7 +53,7 @@ bool match_criteria(char* fn, char* region, char* species, char* type, char* nam
     strcpy(filename, fn);
     
     /* Verificar si el archivo comienza con el nombre dado (si se especificó uno) */
-    if (name != NULL && strncmp(name, filename, strlen(name)) != 0) {
+    if (name != NULL && filename != NULL && strncmp(name, filename, strlen(name)) != 0) {
         return false;
     }
     
@@ -61,7 +61,7 @@ bool match_criteria(char* fn, char* region, char* species, char* type, char* nam
     char* region_dir = strtok(filename, "/");
     
     /* Verificar si el archivo está en la región especificada (si se especificó una) */
-    if (region != NULL && strcmp(region, region_dir) != 0) {
+    if (region != NULL && region_dir != NULL && strcmp(region, region_dir) != 0) {
         return false;
     }
     

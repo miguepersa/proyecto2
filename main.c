@@ -26,7 +26,7 @@ int main(int argc, char *const argv[])
         {0, 0, 0, 0}
     };
 
-    while ((opt = getopt_long(argc, argv, "clr:p:t:", long_options, NULL)) != -1) {
+    while ((opt = getopt_long(argc, argv, "cslr:p:t:", long_options, NULL)) != -1) {
         switch (opt) {
             case 'c':
                 count_flag = 0;
