@@ -8,7 +8,7 @@
 int main(int argc, char *const argv[])
 {
     int opt;
-    int count_flag = 1;
+    int no_count_flag = 0;
     int list_flag = 0;
     int size_flag = 0;
     char *region = NULL;
@@ -29,7 +29,7 @@ int main(int argc, char *const argv[])
     while ((opt = getopt_long(argc, argv, "cslr:p:t:", long_options, NULL)) != -1) {
         switch (opt) {
             case 'c':
-                count_flag = 0;
+                no_count_flag = 1;
                 break;
             case 'l':
                 list_flag = 1;
@@ -47,7 +47,7 @@ int main(int argc, char *const argv[])
                 type = optarg;
                 break;
             case '?':
-                /* handle invalid option */
+                printf("Uso: $ ./fameChecker [-r <region>] [-s <species>] [-t <type>] [-c|--nocount] [-l|--list] [--size] [name]\n");
                 break;
             default:
                 /* handle other cases */
@@ -59,7 +59,7 @@ int main(int argc, char *const argv[])
         strcpy(name, argv[optind]);
     }
 
-    search_dir(".", region, species, type, count_flag, list_flag, size_flag, name);
+    search_dir(".", region, species, type, no_count_flag, list_flag, size_flag, name);
 
     return 0;
 }

@@ -13,7 +13,7 @@ void search_dir(char *dir_name, char *region, char *species, char *type, int noc
         return;
     }
     while ((entry = readdir(dir))) {
-        if (entry->d_name[0] == '.') {
+        if (entry->d_name[0] == '.' || strcmp(entry->d_name, "fameChecker") == 0) {
             continue; 
         }
         
@@ -22,10 +22,10 @@ void search_dir(char *dir_name, char *region, char *species, char *type, int noc
             perror("stat");
             continue;
         }
-        if (S_ISDIR(file_stat.st_mode)) {
+        if (S_ISDIR(file_stat.st_mode) ) {
             search_dir(path, region, species, type, nocount, list, size, name);
         } else if (S_ISREG(file_stat.st_mode)) {
-            if (match_criteria(entry->d_name, region, species, type, name)) {
+            if (match_criteria(path, region, species, type, name)) {
                 if (list) {
                     printf("%s", entry->d_name);
                     if (size) {
@@ -40,25 +40,23 @@ void search_dir(char *dir_name, char *region, char *species, char *type, int noc
     }
     closedir(dir);
     if (!nocount) {
-        printf("Total files: %d", total_files);
+        printf("Total files in \"%s\": %d", dir_name, total_files);
         if (size) {
             printf(" (%ldKB)", (long)total_size / 1024);
         }
-        printf("\n");
+        printf("\n\n");
     }
 }
 
 bool match_criteria(char* fn, char* region, char* species, char* type, char* name) {
-    char *filename = malloc(64);
-    strcpy(filename, fn);
-    
-    /* Verificar si el archivo comienza con el nombre dado (si se especificó uno) */
-    if (name != NULL && filename != NULL && strncmp(name, filename, strlen(name)) != 0) {
-        return false;
+
+    if (strcmp(fn, ".") == 0){
+        return true;
     }
     
     /* Obtener el nombre del directorio de la región */
-    char* region_dir = strtok(filename, "/");
+    char* region_dir = strtok(fn, "/");
+    region_dir = strtok(NULL, "/");
     
     /* Verificar si el archivo está en la región especificada (si se especificó una) */
     if (region != NULL && region_dir != NULL && strcmp(region, region_dir) != 0) {
@@ -80,11 +78,16 @@ bool match_criteria(char* fn, char* region, char* species, char* type, char* nam
     
     /* Verificar si el archivo es del tipo de apariciones especificado (si se especificó uno) */
     if (type != NULL && type_dir != NULL && strcmp(type, type_dir) != 0) {
-        free(filename);
         return false;
     }
 
-    free(filename);
+    char *f_name = strtok(NULL, "/");
+
+    /* Verificar si el archivo comienza con el nombre dado (si se especificó uno) */
+    if (name != NULL && f_name != NULL && strncmp(name, f_name, strlen(name)) != 0) {
+        return false;
+    }
+
     /* Si se pasaron todos los criterios, el archivo cumple con la búsqueda */
     return true;
 }
