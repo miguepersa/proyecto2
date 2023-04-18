@@ -39,7 +39,7 @@ void search_dir(char *dir_name, char *region, char *species, char *type, int noc
         }
     }
     closedir(dir);
-    if (!nocount) {
+    if (!nocount && total_files > 0) {
         printf("Total files in \"%s\": %d", dir_name, total_files);
         if (size) {
             printf(" (%ldKB)", (long)total_size / 1024);
